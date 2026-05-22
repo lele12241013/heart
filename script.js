@@ -13,8 +13,11 @@ let morphTarget = 1;
 let morphProgress = 1;
 let themeRotationTimer = null;
 let loveTextEl = null;
+let clock = null;
 
-const particleCount = 10000;
+const isMobileDevice = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
+
+const particleCount = isMobileDevice ? 6000 : 10000;
 const themeRotationIntervalMs = 2000;
 
 const themes = {
@@ -113,6 +116,7 @@ function createHeartPath(particleIndex, totalParticles) {
 function init() {
   scene = new THREE.Scene();
   loveTextEl = document.getElementById('love-text');
+  clock = new THREE.Clock();
 
   camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1500);
   camera.position.z = 90;
@@ -129,6 +133,7 @@ function init() {
   controls.minDistance = 30;
   controls.maxDistance = 300;
   controls.enablePan = false;
+  controls.enableZoom = !isMobileDevice;
   controls.autoRotate = false;
   controls.autoRotateSpeed = 0.15;
 
@@ -493,7 +498,8 @@ function updateParticleColorsAndSizes() {
 
 function animate() {
   requestAnimationFrame(animate);
-  time += 0.02;
+  const delta = clock ? Math.min(clock.getDelta(), 0.05) : 1 / 60;
+  time += delta * 1.2;
   controls.update();
 
   if (isAnimationEnabled) {
