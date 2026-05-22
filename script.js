@@ -133,7 +133,9 @@ function init() {
   controls.minDistance = 30;
   controls.maxDistance = 300;
   controls.enablePan = false;
-  controls.enableZoom = !isMobileDevice;
+  controls.enableZoom = false;
+  controls.enableRotate = false;
+  controls.enabled = false;
   controls.autoRotate = false;
   controls.autoRotateSpeed = 0.15;
 
