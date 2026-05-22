@@ -121,7 +121,7 @@ function init() {
   clock = new THREE.Clock();
 
   camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1500);
-  camera.position.z = 90;
+  camera.position.z = isMobileDevice ? 118 : 90;
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
