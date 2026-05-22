@@ -14,6 +14,8 @@ let morphProgress = 1;
 let themeRotationTimer = null;
 let loveTextEl = null;
 let clock = null;
+const heartCenter = new THREE.Vector3(0, 0, 0);
+const projectedHeartCenter = new THREE.Vector3();
 
 const isMobileDevice = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
 
@@ -133,9 +135,9 @@ function init() {
   controls.minDistance = 30;
   controls.maxDistance = 300;
   controls.enablePan = false;
-  controls.enableZoom = false;
-  controls.enableRotate = false;
-  controls.enabled = false;
+  controls.enableZoom = !isMobileDevice;
+  controls.enableRotate = true;
+  controls.enabled = true;
   controls.autoRotate = false;
   controls.autoRotateSpeed = 0.15;
 
@@ -163,6 +165,17 @@ function updateLoveTextColor(isAnimated = true) {
     '0 0 10px rgba(255, 255, 255, 0.65), ' +
     '0 0 26px rgba(255, 255, 255, 0.5), ' +
     '0 0 46px rgba(255, 255, 255, 0.35)';
+}
+
+function updateLoveTextPosition() {
+  if (!loveTextEl) return;
+
+  projectedHeartCenter.copy(heartCenter).project(camera);
+  const x = ((projectedHeartCenter.x + 1) * 0.5) * window.innerWidth;
+  const y = ((-projectedHeartCenter.y + 1) * 0.5) * window.innerHeight;
+
+  loveTextEl.style.left = `${x}px`;
+  loveTextEl.style.top = `${y}px`;
 }
 
 function startThemeRotation() {
@@ -509,6 +522,7 @@ function animate() {
   }
 
   updateLoveTextColor(isAnimationEnabled);
+  updateLoveTextPosition();
 
   composer.render();
 }
